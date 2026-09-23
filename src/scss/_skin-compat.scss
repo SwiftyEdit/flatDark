@@ -1,0 +1,166 @@
+/**
+ * Skin compatibility patch.
+ *
+ * See docs/v2/de/09-01-00-themes.md ("Farbvarianten (Stylesheets)"): a skin
+ * is just a dist/skins/<name>.css file that redefines a handful of CSS
+ * custom properties (--bs-primary, --bs-link-color, ...) at runtime - see
+ * src/scss/skins/. That only actually re-colors anything if the rest of the
+ * theme *reads* those custom properties instead of baking $primary in as a
+ * fixed hex value at Sass-compile time.
+ *
+ * Elsewhere in this theme (_flat.scss, _navbar.scss, _shop.scss, ...)
+ * $primary is used directly for exactly that reason - it's simpler, and the
+ * theme itself only ever ships with one hardcoded primary color. This file
+ * re-patches every one of those spots onto var(--bs-primary) (with
+ * color-mix() standing in for the Sass mix() calls used elsewhere), so a
+ * skin - which changes nothing but that one custom property - actually
+ * reaches the whole theme. Imported last in theme.scss, after _flat.scss,
+ * so it wins the cascade the same way _flat.scss wins over Bootstrap.
+ */
+
+$skin-primary: var(--#{$prefix}primary);
+$skin-primary-hover: color-mix(in srgb, var(--#{$prefix}primary) 82%, white);
+$skin-primary-active: color-mix(in srgb, var(--#{$prefix}primary) 88%, black);
+
+// Buttons
+.btn-primary {
+    --#{$prefix}btn-color: #{$skin-primary};
+    --#{$prefix}btn-bg: color-mix(in srgb, #{$skin-primary} 14%, var(--#{$prefix}body-bg));
+    --#{$prefix}btn-border-color: #{$skin-primary};
+    --#{$prefix}btn-hover-color: #{$skin-primary-hover};
+    --#{$prefix}btn-hover-bg: color-mix(in srgb, #{$skin-primary} 24%, var(--#{$prefix}body-bg));
+    --#{$prefix}btn-hover-border-color: #{$skin-primary-hover};
+    --#{$prefix}btn-active-color: #{$skin-primary-active};
+    --#{$prefix}btn-active-bg: color-mix(in srgb, #{$skin-primary} 32%, var(--#{$prefix}body-bg));
+    --#{$prefix}btn-active-border-color: #{$skin-primary};
+    --#{$prefix}btn-disabled-color: #{$skin-primary};
+    --#{$prefix}btn-disabled-bg: color-mix(in srgb, #{$skin-primary} 14%, var(--#{$prefix}body-bg));
+    --#{$prefix}btn-disabled-border-color: color-mix(in srgb, #{$skin-primary} 35%, transparent);
+    --#{$prefix}btn-focus-shadow-rgb: var(--#{$prefix}primary-rgb);
+}
+
+.btn-outline-primary {
+    --#{$prefix}btn-color: #{$skin-primary};
+    --#{$prefix}btn-border-color: #{$skin-primary};
+    --#{$prefix}btn-hover-color: #{$skin-primary-hover};
+    --#{$prefix}btn-hover-bg: color-mix(in srgb, #{$skin-primary} 24%, var(--#{$prefix}body-bg));
+    --#{$prefix}btn-hover-border-color: #{$skin-primary-hover};
+    --#{$prefix}btn-active-color: #{$skin-primary-hover};
+    --#{$prefix}btn-active-bg: color-mix(in srgb, #{$skin-primary} 32%, var(--#{$prefix}body-bg));
+    --#{$prefix}btn-active-border-color: #{$skin-primary};
+}
+
+// Alerts, badges, list-group and table contextual variants
+.alert-primary {
+    color: $skin-primary;
+    border-left-color: $skin-primary;
+
+    .alert-link {
+        color: $skin-primary-hover;
+    }
+}
+
+.text-bg-primary {
+    color: $skin-primary !important;
+    border-color: $skin-primary;
+}
+
+.list-group-item-primary {
+    color: $skin-primary;
+    border-left-color: $skin-primary;
+}
+
+.table-primary {
+    --#{$prefix}table-color: #{$skin-primary};
+    --#{$prefix}table-striped-color: #{$skin-primary};
+    --#{$prefix}table-active-color: #{$skin-primary};
+    --#{$prefix}table-hover-color: #{$skin-primary};
+}
+
+// Active/selected states (dropdowns, pills, pagination, checkboxes)
+.list-group-item.active {
+    border-color: $skin-primary;
+    color: $skin-primary;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: $skin-primary;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    color: $skin-primary;
+    border-bottom-color: $skin-primary;
+}
+
+.page-item.active .page-link {
+    color: $skin-primary;
+    box-shadow: inset 0 (-$flat-line-width) 0 $skin-primary;
+}
+
+.form-check-input:checked {
+    border-color: $skin-primary;
+}
+
+.accordion-button:not(.collapsed) {
+    color: $skin-primary;
+    border-bottom-color: $skin-primary;
+}
+
+// Navbar active link + search focus (_navbar.scss)
+.navbar-se ul li.nav-item a.nav-link.active {
+    color: $skin-primary;
+    border-bottom-color: $skin-primary;
+}
+
+.navbar-se .searchbox:focus {
+    border-color: $skin-primary;
+}
+
+// Shop range filter + product variant picker (_shop.scss)
+.range-slider {
+    .noUi-connect {
+        background: $skin-primary;
+    }
+
+    .noUi-base .noUi-handle {
+        border-color: $skin-primary;
+    }
+}
+
+.variants-picker .card.active {
+    border-color: $skin-primary;
+}
+
+// $price-tag-color (_variables.scss) is $primary - baked into .price-tag's
+// color at compile time like everywhere else, so it needs the same runtime
+// patch to actually follow a skin.
+.price-tag {
+    color: $skin-primary;
+}
+
+.teaser-image-wrap .price-tag.price-tag-fix {
+    background-color: $skin-primary;
+}
+
+.product-buy-box {
+    border-left-color: $skin-primary;
+}
+
+// The add-to-cart button on products-list.tpl/products-display.tpl switched
+// from .btn-outline-success to .btn-outline-primary - already covered by
+// the .btn-outline-#{$color} loop further up, nothing extra needed here.
+
+// Sortable drag placeholder + post thumbnail hover
+.sortable-ghost {
+    border-color: $skin-primary;
+}
+
+.product-list-entry:hover {
+    border-color: $skin-primary;
+}
+
+.post-thumbnail:hover {
+    border-color: $skin-primary;
+}

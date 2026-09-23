@@ -1,0 +1,57 @@
+hr.hr-shadow {
+    padding: 0;
+    border: 0;
+    outline: 0;
+    overflow: hidden;
+    height: 25px;
+    margin: 15px 0 0 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+hr.hr-shadow::after {
+    content: "";
+    margin: 0 auto;
+    position: relative;
+    top: -35px;
+    display: block;
+    width: 75%;
+    height: 1px;
+    background: var(--#{$prefix}border-color);
+}
+
+hr {
+    border-top: 1px solid var(--#{$prefix}border-color);
+}
+
+.scrollBox {
+    max-height: 250px;
+    overflow: auto;
+    border: 1px solid var(--#{$prefix}border-color);
+    padding: 15px;
+}
+
+// drag placeholder for sortable lists (e.g. wishlist reordering) - an
+// outline instead of a filled background, same rule as everywhere else
+.sortable-ghost {
+    background: transparent;
+    border: 1px dashed $primary;
+    opacity: .6;
+}
+
+.toggle {
+    a {
+        display: flex;
+        text-decoration: none;
+    }
+
+    span {
+        transition: all 0.3s ease-in-out;
+    }
+
+    a[aria-expanded="true"] {
+        span {
+            rotate: 180deg;
+        }
+    }
+}

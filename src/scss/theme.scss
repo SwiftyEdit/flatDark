@@ -1,0 +1,205 @@
+/**
+ * SwiftyEdit flatDark Theme
+ */
+
+// Custom variables must load before Bootstrap so its `!default` values pick
+// them up (see the comment at the top of _variables.scss).
+@import "variables";
+
+// Bootstrap Core
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// Bootstrap Icons
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
+
+@import "../../node_modules/glightbox/dist/css/glightbox";
+@import "../../node_modules/nouislider/dist/nouislider";
+
+@import "posts";
+@import "shop";
+@import "events";
+@import "comments";
+@import "navbar";
+@import "helpers";
+
+// "No colored surfaces, text only" + thin-line accents - imported last so it
+// wins the cascade against Bootstrap's own component rules above.
+@import "flat";
+
+// Re-points every hardcoded $primary usage above onto var(--bs-primary), so
+// a skin (dist/skins/*.css, see src/scss/skins/) can actually recolor the
+// theme - must come after "flat" to win the cascade against it.
+@import "skin-compat";
+
+
+@keyframes cart-bump {
+    0%, 100% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(1.35);
+        color: $success;
+    }
+}
+
+// ---------------------------------------------------------------------
+// Header / hero
+//
+// No background of its own - it's the same surface as the page
+// (var(--bs-body-bg), like every other element in this theme), separated
+// from the content below by a single hairline border instead of a color.
+// ---------------------------------------------------------------------
+
+#pageHeader {
+    // Establishes its own stacking context above the sticky navbar right
+    // below it (z-index $zindex-sticky) - otherwise the user/admin dropdown
+    // menu here (position:absolute, Bootstrap's default $zindex-dropdown,
+    // which is *lower* than $zindex-sticky) opens underneath the navbar
+    // instead of over it.
+    position: relative;
+    z-index: $zindex-sticky + 1;
+
+    border-bottom: 1px solid var(--#{$prefix}border-color);
+
+    .header-decoration {
+        display: none;
+    }
+
+    // Brand (logo + site name) and the utility icons share one row -
+    // brand flush left, icons flush right.
+    .header-bar {
+        row-gap: .5rem;
+    }
+
+    .site-brand {
+        color: var(--#{$prefix}body-color);
+        gap: .5rem;
+        min-width: 0;
+
+        &:hover {
+            color: var(--#{$prefix}body-color);
+        }
+    }
+
+    .site-logo {
+        max-height: 28px;
+        width: auto;
+    }
+
+    .site-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .site-subtitle {
+        font-size: .8rem;
+        font-weight: 400;
+        color: var(--#{$prefix}secondary-color);
+    }
+
+    .header-utility-bar {
+        column-gap: .25rem;
+
+        .btn-link {
+            color: var(--#{$prefix}secondary-color);
+            text-decoration: none;
+
+            &:hover {
+                color: var(--#{$prefix}body-color);
+            }
+        }
+    }
+
+    .shopping-cart-container {
+        a {
+            text-decoration: none;
+            padding: 3px 5px;
+            color: var(--#{$prefix}secondary-color);
+
+            &:hover {
+                color: var(--#{$prefix}body-color);
+            }
+        }
+
+        &.cart-bump i {
+            animation: cart-bump 0.6s ease-in-out;
+        }
+    }
+
+    .social-media {
+        display: flex;
+        align-items: center;
+
+        a {
+            text-decoration: none;
+            padding: 3px 5px;
+            color: var(--#{$prefix}secondary-color);
+
+            &:hover {
+                color: var(--#{$prefix}body-color);
+            }
+        }
+    }
+
+    .user-status-container {
+        button.btn-link {
+            padding: 3px 5px;
+            color: var(--#{$prefix}secondary-color);
+            text-decoration: none;
+
+            &:hover {
+                color: var(--#{$prefix}body-color);
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------
+// Footer - same rule: page background, just a hairline border on top
+// ---------------------------------------------------------------------
+
+#pageFooter {
+    border-top: 1px solid var(--#{$prefix}border-color);
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+    color: var(--#{$prefix}secondary-color);
+
+    a {
+        color: var(--#{$prefix}body-color);
+    }
+
+    .legal-pages-container {
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                display: inline-block;
+                padding: 0;
+
+                a {
+                    text-decoration: none;
+                    padding: 3px 5px;
+                }
+            }
+        }
+    }
+}
+
+// A little "sunken" depth, on purpose - see $surface-sunken-bg in
+// _variables.scss for why this isn't a plain hex. The negative margin-top
+// cancels out .navbar-se's margin-bottom ($navbar-spacer) so this sits
+// flush against the navbar instead of leaving a gap of plain page
+// background above it - a page without a teaser keeps that margin as-is.
+#pageTeaser {
+    background-color: $surface-sunken-bg;
+    margin-top: -$navbar-spacer;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1rem;
+}

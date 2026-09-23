@@ -1,0 +1,30 @@
+/**
+ * Shared building block for flatDark skins (color variants) - see
+ * docs/v2/de/09-01-00-themes.md, "Farbvarianten (Stylesheets)".
+ *
+ * Each file in this folder (other than this one, a leading-underscore Sass
+ * partial) is picked up by discoverSkinEntries() in vite.config.js and
+ * compiled standalone to dist/skins/<name>.css, so it has none of core.scss's
+ * imports in scope - only Bootstrap's pure-Sass function partial is pulled
+ * in here, for to-rgb().
+ *
+ * flatDark ships only a dark palette (no light/dark switch, see
+ * _variables.scss), so unlike the default theme's skins there is no
+ * [data-bs-theme=dark] variant to also fill in - one :root block is the
+ * whole skin.
+ */
+
+@import "../../../node_modules/bootstrap/scss/functions";
+
+@mixin skin-tokens($primary, $primary-hover: null) {
+    $hover: if($primary-hover, $primary-hover, mix($primary, white, 65%));
+
+    :root {
+        --bs-primary: #{$primary};
+        --bs-primary-rgb: #{to-rgb($primary)};
+        --bs-link-color: #{$primary};
+        --bs-link-color-rgb: #{to-rgb($primary)};
+        --bs-link-hover-color: #{$hover};
+        --bs-link-hover-color-rgb: #{to-rgb($hover)};
+    }
+}

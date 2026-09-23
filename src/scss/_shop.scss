@@ -1,0 +1,293 @@
+/**
+ * css for all shop entries
+ */
+
+// Single product page (products-display.tpl): the price + "add to cart"
+// column, set apart with the same thin-line language as alerts/list-group
+// items elsewhere in this theme instead of a filled background - no new
+// surface color, transparent like everything else.
+.product-buy-box {
+    // 3px to match $flat-alert-line-width in _flat.scss (alerts/list-group
+    // left-line accents) - can't reference that variable here, _shop.scss
+    // compiles before _flat.scss (see the @import order in theme.scss).
+    border-left: 3px solid $primary; // patched for skins in _skin-compat.scss
+    padding-left: 1rem;
+
+    .price-tag {
+        border: none;
+        padding: 0;
+        text-align: left;
+    }
+}
+
+// The listing is a two-column grid of tiles, not the plain one-column list
+// the default theme uses - a deliberate departure, not a smaller version of
+// the same layout. Bootstrap's .row is display:flex with align-items:stretch
+// by default, so every .col in a row is already the same height; the
+// .product-list-entry inside just has to fill it (height:100%) and be a
+// column flexbox itself so .product-list-entry-actions can pin itself to
+// the bottom via margin-top:auto - that's what keeps the "Add to cart"/
+// "Read more" buttons lined up across a row even when teaser text length
+// differs between products.
+.product-list-entry {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--#{$prefix}border-color);
+
+    &:hover {
+        border-color: $primary; // patched for skins in _skin-compat.scss
+    }
+
+    &.draft {
+        opacity: 0.85;
+        border-color: $info;
+
+        .alert-draft {
+            padding: 5px 15px;
+            border-bottom: 1px solid $info;
+            color: $info;
+        }
+    }
+}
+
+.teaser-image-wrap {
+    position: relative;
+}
+
+.teaser-image {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.04);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.product-list-entry-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.product-list-entry-actions {
+    // Pinned to the bottom of the card - see the comment on
+    // .product-list-entry above.
+    margin-top: auto;
+    padding-top: .5rem;
+}
+
+.price-tag {
+    border: 1px solid var(--#{$prefix}border-color);
+    color: $price-tag-color;
+    padding: 5px 15px;
+    text-align: center;
+
+    &.price-tag-fix {
+        // A plain float doesn't work here - .product-list-entry-body above
+        // is a flex column, and floats have no effect on flex items - so
+        // this settles into the top-right corner via alignment instead.
+        // Only actually used as a fallback when a product has no image to
+        // overlay the tag on - see .teaser-image-wrap below for the normal
+        // case.
+        align-self: flex-end;
+        width: auto;
+        min-width: 140px;
+        margin-bottom: .5rem;
+    }
+
+    .price-predecimal {
+        font-size: 32px;
+        font-weight: 300;
+    }
+
+    .price-decimal {
+        vertical-align: super;
+        font-size: 18px;
+        font-weight: 300;
+        text-decoration: underline;
+    }
+}
+
+// Overlaid on the product image's bottom-right corner instead of sitting in
+// the card body - a deliberate, explicitly-requested exception to the
+// theme's "text only, no filled background" rule (see _flat.scss): a solid
+// primary fill, with body-bg used as the text color so it reads clearly
+// against a primary of any brightness. Skin-reactive (_skin-compat.scss).
+.teaser-image-wrap .price-tag.price-tag-fix {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    align-self: auto;
+    width: auto;
+    min-width: 0;
+    margin-bottom: 0;
+    border: none;
+    background-color: $primary;
+    color: $body-bg;
+
+    .price-tag-note,
+    .price-tag-label,
+    .product-unit,
+    .product-amount {
+        color: inherit;
+        border-color: transparent;
+        opacity: .75;
+    }
+}
+
+.price-tag-note {
+    display: block;
+    color: var(--#{$prefix}secondary-color);
+}
+
+.product-unit,
+.product-amount {
+    font-size: 11px;
+    opacity: .6;
+}
+
+.product-amount::before {
+    content: " / ";
+    font-size: 11px;
+    opacity: .6;
+}
+
+.price-tag-label:not(:empty) {
+    font-size: 11px;
+    opacity: .8;
+    color: var(--#{$prefix}secondary-color);
+    border: 1px solid var(--#{$prefix}border-color);
+    float: left;
+    padding: 3px;
+    margin-top: -5px;
+    margin-left: -5px;
+}
+
+// Neutral on purpose - not every delivery time means "in stock, all good"
+// (backorder/pre-order texts use this same markup), so it shouldn't
+// hardcode a "success" meaning it can't actually promise. A later update is
+// meant to let the admin assign a color per delivery time in the backend;
+// this just stops pre-empting that with green.
+.delivery-time {
+    span {
+        color: inherit;
+    }
+}
+
+// Variants / accessories / related products (products-display.tpl): these
+// used to be a fixed 4-column grid, which just grows to more rows - and on
+// any narrower viewport, squeezes those same 4 columns into unreadably thin
+// ones with letter-by-letter title wrapping - the more items there are. A
+// horizontally scrolling strip of fixed-size cards instead: the number of
+// items only ever changes how far there is to scroll, never how tall the
+// page gets, and every card is the same size regardless of its image's
+// original proportions or how long its title/teaser happen to be.
+.related-scroller {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: .5rem; // room for the scrollbar itself, so it doesn't sit flush under the cards
+    scroll-snap-type: x proximity;
+
+    .card {
+        flex: 0 0 160px;
+        scroll-snap-align: start;
+    }
+
+    .card-img-top {
+        aspect-ratio: 1;
+        object-fit: cover;
+    }
+
+    .card-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    small {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+// shopping cart
+
+.table-sc {
+    .sc-items-options {
+        span {
+            padding-right: 5px;
+        }
+    }
+
+    td {
+        span.price-predecimal,
+        span.price-decimal {
+            font-size: $font-size-base;
+            line-height: $line-height-base;
+            font-weight: normal;
+            vertical-align: initial;
+        }
+    }
+}
+
+// range slider
+
+.range-slider {
+    height: 10px;
+    background: transparent;
+    border-color: var(--#{$prefix}border-color);
+    border-radius: 0;
+
+    .noUi-connects {
+        border-radius: 0;
+    }
+
+    .noUi-connect {
+        background: $primary;
+    }
+
+    .noUi-tooltip {
+        display: none;
+        background: var(--#{$prefix}body-bg);
+        border-color: var(--#{$prefix}border-color);
+        color: var(--#{$prefix}body-color);
+    }
+
+    .noUi-active .noUi-tooltip {
+        display: block;
+    }
+
+    .noUi-base {
+        .noUi-handle {
+            height: 20px;
+            width: 20px;
+            top: -5px;
+            right: -10px; /* half the width */
+            border-radius: 50%;
+            background: var(--#{$prefix}body-bg);
+            border: 2px solid $primary;
+            box-shadow: none;
+
+            &::after, &::before {
+                display: none;
+            }
+        }
+    }
+}
+
+.variants-picker {
+    .card.active {
+        border-color: $primary;
+    }
+}

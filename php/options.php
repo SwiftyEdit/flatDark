@@ -1,0 +1,224 @@
+<?php
+
+/**
+ * flatDark Theme options
+ * @var object $smarty
+ * @var string $se_base_url
+ * @var string $first_product_img_src
+ * @var string $target_page
+ *
+ * @var array $theme_values data from -> edit page - theme tab
+ * @var array $category_template_data data from -> edit category - theme tab
+ */
+
+if(defined('SE_SECTION') && SE_SECTION === 'frontend') {
+
+ /**
+  * for example manipulate page values
+  * $page_title = 'Extended title by flatDark options file: ' . $page_title;
+  * $smarty->assign('page_title', "$page_title");
+  */
+
+    $discord_page = '';
+    $facebook_page = '';
+    $github_page = '';
+    $insta_page = '';
+    $linkedin_page = '';
+    $slack_page = '';
+    $twitch_page = '';
+    $twitter_page = '';
+    $youtube_page = '';
+
+  $theme_options = se_get_theme_options("flatDark");
+
+  $get_discord_key = array_search("theme_discord", array_column($theme_options, 'theme_label'));
+  if(isset($theme_options[$get_discord_key]['theme_value']) && ($theme_options[$get_discord_key]['theme_value'] != '')) {
+      $discord_page = $theme_options[$get_discord_key]['theme_value'];
+      $discord_link = '<a class="p-1" href="'.$discord_page.'" title="'.$discord_page.'" ><i class="bi bi-discord"></i></a> ';
+      $smarty->assign('discord_link', "$discord_link");
+  }
+
+   
+  $get_fb_key = array_search("theme_facebook", array_column($theme_options, 'theme_label'));
+  if(isset($theme_options[$get_fb_key]['theme_value']) && ($theme_options[$get_fb_key]['theme_value'] != '')) {
+      $facebook_page = $theme_options[$get_fb_key]['theme_value'];
+      $fb_link = '<a class="p-1" href="'.$facebook_page.'" title="'.$facebook_page.'"><i class="bi bi-facebook"></i></a> ';
+      $smarty->assign('fb_link', "$fb_link");
+  }
+
+  
+  $get_github_key = array_search("theme_github", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_github_key]['theme_value']) && ($theme_options[$get_github_key]['theme_value'] != '')) {
+        $github_page = $theme_options[$get_github_key]['theme_value'];
+        $github_link = '<a class="p-1" href="'.$github_page.'" title="'.$github_page.'"><i class="bi bi-github"></i></a> ';
+        $smarty->assign('github_link', "$github_link");
+    }
+
+  
+  $get_insta_key = array_search("theme_instagram", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_insta_key]['theme_value']) && ($theme_options[$get_insta_key]['theme_value'] != '')) {
+        $insta_page = $theme_options[$get_insta_key]['theme_value'];
+        $insta_link = '<a class="p-1" href="'.$insta_page.'" title="'.$insta_page.'"><i class="bi bi-instagram"></i></a> ';
+        $smarty->assign('insta_link', "$insta_link");
+    }
+
+  
+  $get_linkedin_key = array_search("theme_linkedin", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_linkedin_key]['theme_value']) && ($theme_options[$get_linkedin_key]['theme_value'] != '')) {
+        $linkedin_page = $theme_options[$get_linkedin_key]['theme_value'];
+        $linkedin_link = '<a class="p-1" href="'.$linkedin_page.'" title="'.$linkedin_page.'"><i class="bi bi-linkedin"></i></a> ';
+        $smarty->assign('linkedin_link', "$linkedin_link");
+    }
+
+  
+  $get_slack_key = array_search("theme_slack", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_slack_key]['theme_value']) && ($theme_options[$get_slack_key]['theme_value'] != '')) {
+        $slack_page = $theme_options[$get_slack_key]['theme_value'];
+        $slack_link = '<a class="p-1" href="'.$slack_page.'" title="'.$slack_page.'"><i class="bi bi-slack"></i></a> ';
+        $smarty->assign('slack_link', "$slack_link");
+    }
+
+  
+  $get_twitch_key = array_search("theme_twitch", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_twitch_key]['theme_value']) && ($theme_options[$get_twitch_key]['theme_value'] != '')) {
+        $twitch_page = $theme_options[$get_twitch_key]['theme_value'];
+        $twitch_link = '<a class="p-1" href="'.$twitch_page.'" title="'.$twitch_page.'"><i class="bi bi-twitch"></i></a> ';
+        $smarty->assign('twitch_link', "$twitch_link");
+    }
+
+  
+  $get_twitter_key = array_search("theme_twitter", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_twitter_key]['theme_value']) && ($theme_options[$get_twitter_key]['theme_value'] != '')) {
+        $twitter_page = $theme_options[$get_twitter_key]['theme_value'];
+        $twitter_link = '<a class="p-1" href="'.$twitter_page.'" title="'.$twitter_page.'"><i class="bi bi-twitter"></i></a> ';
+        $smarty->assign('twitter_link', "$twitter_link");
+    }
+
+  
+  $get_youtube_key = array_search("theme_youtube", array_column($theme_options, 'theme_label'));
+    if(isset($theme_options[$get_youtube_key]['theme_value']) && ($theme_options[$get_youtube_key]['theme_value'] != '')) {
+        $youtube_page = $theme_options[$get_youtube_key]['theme_value'];
+        $youtube_link = '<a class="p-1" href="'.$youtube_page.'" title="'.$youtube_page.'"><i class="bi bi-youtube"></i></a> ';
+        $smarty->assign('youtube_link', "$youtube_link");
+    }
+
+  
+  $sm_string = '';
+  $sm_string = $discord_page.$facebook_page.$github_page.$insta_page.$linkedin_page.$slack_page.$twitch_page.$twitter_page.$youtube_page;
+  if($sm_string != '') {
+	  $smarty->assign('social_media_block', "show");
+  }
+
+  $get_hide_copyright_key = array_search("theme_hide_copyright", array_column($theme_options, 'theme_label'));
+  $hide_copyright = isset($theme_options[$get_hide_copyright_key]['theme_value']) && ($theme_options[$get_hide_copyright_key]['theme_value'] == '1');
+  if(!$hide_copyright) {
+      $smarty->assign('show_footer_copyright', "show");
+  }
+
+
+  // $structuredDataContext
+    if (!empty($structuredDataContext['type']) && !empty($structuredDataContext['data'])) {
+        switch ($structuredDataContext['type']) {
+            case 'Product':
+                $data = $structuredDataContext['data'];
+                $page_json_ld = [
+                    "@context" => "https://schema.org",
+                    "@type" => "Product",
+                    "name" => html_entity_decode($data['meta_title']) ?? '',
+                    "image" => rtrim($se_base_url, '/') . $first_product_img_src ?? [],
+                    "description" => html_entity_decode($product_data['meta_description']) ?? '',
+                    "sku" => $data['product_number'] ?? '',
+                    "offers" => [
+                        "@type" => "Offer",
+                        "priceCurrency" => $data['product_currency'],
+                        "price" => $data['product_price_gross'] ?? '',
+                        "availability" => "https://schema.org/" . ($data['product_availability'] ?? 'InStock'),
+                        "url" => $se_base_url.$target_page.$product_data['slug'] ?? ''
+                    ]
+                ];
+                break;
+
+            case 'WebPage':
+                $data = $structuredDataContext['data'];
+                $page_json_ld = [
+                    "@context" => "https://schema.org",
+                    "@type" => "WebPage",
+                    "name" => $data['paget_title'] ?? '',
+                    "description" => $data['page_meta_description'] ?? '',
+                    "url" => $se_base_url.$data['page_permalink'] ?? ''
+                ];
+                break;
+        }
+    }
+
+    /**
+     * Shop/blog/event pages reuse the same $page_contents row (and thus the
+     * same $theme_values) for the category listing and for a single
+     * product/post/event display - the URL just carries an extra slug.
+     * Handlers set $display_mode to tell those cases apart; skip the page's
+     * own teaser on single-item displays, it belongs to the listing only.
+     */
+    $is_single_item_display = isset($display_mode) && in_array($display_mode, ['show_product', 'show_post', 'show_event'], true);
+
+    if(!$is_single_item_display && $theme_values['teaser_text'] != '') {
+        $teaser_text = html_entity_decode($theme_values['teaser_text'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $smarty->assign('teaser_text', $teaser_text);
+    }
+
+    // overwrite teaser text from $theme_values['teaser_text']; only set by
+    // products-list.php/posts-list.php when displaying a category
+    if(isset($category_template_data) && is_array($category_template_data) && $category_template_data['teaser_text'] != '') {
+        $teaser_text = html_entity_decode($category_template_data['teaser_text'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $smarty->assign('teaser_text', $teaser_text);
+    }
+
+} elseif(defined('SE_SECTION') && SE_SECTION === 'backend') {
+
+	/**
+	 * Theme options for /admin/addons/theme/flatDark/
+	 */
+
+    $theme_options = [
+        "discord" => [
+            "label" => "Discord (URL)",
+            "type"  => "text"
+        ],
+        "facebook" => [
+            "label" => "Facebook Page or Account (URL)",
+            "type"  => "text"
+        ],
+        "github" => [
+            "label" => "GitHub (URL)",
+            "type"  => "text"
+        ],
+        "instagram" => [
+            "label" => "Instagram (URL)",
+            "type"  => "text"
+        ],
+        "linkedin" => [
+            "label" => "LinkedIn (URL)",
+            "type"  => "text"
+        ],
+        "slack" => [
+            "label" => "Slack (URL)",
+            "type"  => "text"
+        ],
+        "twitch" => [
+            "label" => "Twitch (URL)",
+            "type"  => "text"
+        ],
+        "x" => [
+            "label" => "X Account (URL)",
+            "type"  => "text"
+        ],
+        "youtube" => [
+            "label" => "YouTube (URL)",
+            "type"  => "text"
+        ],
+        "hide_copyright" => [
+            "label" => "Hide \"powered by SwiftyEdit\" line in the footer",
+            "type"  => "checkbox"
+        ],
+    ];
+
+}

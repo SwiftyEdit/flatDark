@@ -1,0 +1,194 @@
+/**
+ * flatDark - "text only, thin lines" overrides.
+ *
+ * Standard Bootstrap contextual classes (.alert-danger, .badge/.text-bg-
+ * success, .list-group-item-warning, .table-info, ...) fill an element with
+ * a colored background; in this theme they don't - the color only ever
+ * shows up in text/icons/borders, replaced by a thin line accent:
+ *
+ *   - alerts: a thin line to the left of the alert (border-left)
+ *
+ * Buttons are the one deliberate exception (see below) - a bottom-only line
+ * with *no* fill read as barely a button at all, so they get a subtle dark,
+ * color-tinted surface back.
+ *
+ * This file is imported last (after Bootstrap) in theme.scss, so these
+ * rules win the cascade against Bootstrap's own same-specificity selectors
+ * without needing !important, except where Bootstrap's own utility classes
+ * (.text-bg-*) are themselves !important.
+ */
+
+$flat-line-width: 2px;
+$flat-alert-line-width: 3px;
+
+// ---------------------------------------------------------------------
+// Buttons
+//
+// Filled buttons: thin bottom line + a subtle dark, color-tinted fill (just
+// enough to read as a surface - never the bright/saturated fill Bootstrap
+// uses by default).
+//
+// Outline buttons and pill buttons (.rounded-pill) both keep a full contour
+// instead of the bottom-only line - a single bottom edge on an otherwise
+// fully rounded pill, or on a button whose entire *point* is the outline,
+// doesn't read as a border at all.
+// ---------------------------------------------------------------------
+
+.btn {
+    border-style: solid;
+    border-width: 0 0 $flat-line-width;
+    border-radius: 0;
+}
+
+.btn.rounded-pill {
+    border-width: var(--#{$prefix}border-width);
+}
+
+@each $color, $value in $theme-colors {
+    .btn-#{$color} {
+        --#{$prefix}btn-color: #{$value};
+        --#{$prefix}btn-bg: #{mix($value, $body-bg, 14%)};
+        --#{$prefix}btn-border-color: #{$value};
+        --#{$prefix}btn-hover-color: #{mix($value, white, 82%)};
+        --#{$prefix}btn-hover-bg: #{mix($value, $body-bg, 24%)};
+        --#{$prefix}btn-hover-border-color: #{mix($value, white, 82%)};
+        --#{$prefix}btn-active-color: #{mix($value, black, 88%)};
+        --#{$prefix}btn-active-bg: #{mix($value, $body-bg, 32%)};
+        --#{$prefix}btn-active-border-color: #{$value};
+        --#{$prefix}btn-disabled-color: #{$value};
+        --#{$prefix}btn-disabled-bg: #{mix($value, $body-bg, 14%)};
+        --#{$prefix}btn-disabled-border-color: #{rgba($value, .35)};
+        --#{$prefix}btn-focus-shadow-rgb: #{to-rgb($value)};
+    }
+
+    .btn-outline-#{$color} {
+        --#{$prefix}btn-color: #{$value};
+        --#{$prefix}btn-bg: transparent;
+        --#{$prefix}btn-border-color: #{$value};
+        --#{$prefix}btn-hover-color: #{mix($value, white, 82%)};
+        --#{$prefix}btn-hover-bg: #{mix($value, $body-bg, 24%)};
+        --#{$prefix}btn-hover-border-color: #{mix($value, white, 82%)};
+        --#{$prefix}btn-active-color: #{mix($value, white, 82%)};
+        --#{$prefix}btn-active-bg: #{mix($value, $body-bg, 32%)};
+        --#{$prefix}btn-active-border-color: #{$value};
+        border-width: var(--#{$prefix}border-width);
+    }
+}
+
+// ---------------------------------------------------------------------
+// Alerts - thin left line, never a filled background
+// ---------------------------------------------------------------------
+
+.alert {
+    border-radius: 0;
+}
+
+@each $color, $value in $theme-colors {
+    .alert-#{$color} {
+        color: $value;
+        background-color: transparent;
+        border: 0 solid transparent;
+        border-left: $flat-alert-line-width solid $value;
+
+        .alert-link {
+            color: mix($value, white, 82%);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------
+// Badges - text + thin outline instead of a filled background
+// ---------------------------------------------------------------------
+
+@each $color, $value in $theme-colors {
+    .text-bg-#{$color} {
+        color: #{$value} !important;
+        background-color: transparent !important;
+        border: 1px solid #{$value};
+    }
+}
+
+// ---------------------------------------------------------------------
+// List groups - same left-line language as alerts
+// ---------------------------------------------------------------------
+
+@each $color, $value in $theme-colors {
+    .list-group-item-#{$color} {
+        color: $value;
+        background-color: transparent;
+        border-color: var(--#{$prefix}border-color);
+        border-left: $flat-alert-line-width solid $value;
+    }
+}
+
+.list-group-item.active {
+    background-color: transparent;
+    border-color: $primary;
+    color: $primary;
+}
+
+// ---------------------------------------------------------------------
+// Tables - contextual rows stay text-colored, no tinted row background
+// ---------------------------------------------------------------------
+
+@each $color, $value in $theme-colors {
+    .table-#{$color} {
+        --#{$prefix}table-color: #{$value};
+        --#{$prefix}table-bg: transparent;
+        --#{$prefix}table-border-color: var(--#{$prefix}border-color);
+        // Bootstrap's table-variant mixin bakes these in as black (computed
+        // for a light tinted background) - same "text only" color as the
+        // row itself, and the striped/hover/active *backgrounds* stay
+        // transparent too, never a tinted fill.
+        --#{$prefix}table-striped-color: #{$value};
+        --#{$prefix}table-striped-bg: transparent;
+        --#{$prefix}table-active-color: #{$value};
+        --#{$prefix}table-active-bg: transparent;
+        --#{$prefix}table-hover-color: #{$value};
+        --#{$prefix}table-hover-bg: transparent;
+    }
+}
+
+// ---------------------------------------------------------------------
+// Active/selected states elsewhere that Bootstrap fills with $primary by
+// default (dropdown items, pagination, pills) - same "text + line" idea.
+// ---------------------------------------------------------------------
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: transparent;
+    color: $primary;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: transparent;
+    color: $primary;
+    border-bottom: $flat-line-width solid $primary;
+}
+
+.page-item.active .page-link {
+    background-color: transparent;
+    border-color: var(--#{$prefix}border-color);
+    color: $primary;
+    box-shadow: inset 0 (-$flat-line-width) 0 $primary;
+}
+
+.page-link {
+    background-color: transparent;
+}
+
+.form-check-input:checked {
+    background-color: transparent;
+    border-color: $primary;
+}
+
+// Expanded accordion header: Bootstrap fills it with --bs-primary-bg-subtle,
+// a light tint meant for a light page - same "no filled background" rule as
+// everywhere else, replaced with a bottom line instead.
+.accordion-button:not(.collapsed) {
+    background-color: transparent;
+    color: $primary;
+    box-shadow: none;
+    border-bottom: $flat-line-width solid $primary;
+}

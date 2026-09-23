@@ -1,0 +1,113 @@
+// The navbar is sticky (see navigation.tpl) - it needs to be opaque or
+// content scrolling underneath it stays readable through it. A touch
+// lighter than the page ($surface-raised-bg, same idea as #pageTeaser's
+// $surface-sunken-bg just the other direction), not a plain copy of
+// var(--bs-body-bg) - still separated from the content below by the usual
+// hairline border either way.
+.navbar-se {
+    background-color: $surface-raised-bg;
+    border-bottom: 1px solid var(--#{$prefix}border-color);
+    // Breathing room below the nav - the page content otherwise sits flush
+    // against this border regardless of layout template, since none of them
+    // add their own top spacing. #pageTeaser (theme.scss) cancels this out
+    // with a matching negative margin-top when a page has one - see
+    // $navbar-spacer in _variables.scss.
+    margin-bottom: $navbar-spacer;
+
+    ul {
+        li.nav-item {
+            a.nav-link {
+                color: var(--#{$prefix}secondary-color);
+
+                &:hover {
+                    color: var(--#{$prefix}body-color);
+                }
+
+                &.active {
+                    color: $primary;
+                    border-bottom: 2px solid $primary;
+                }
+            }
+
+            // Split dropdown items (navigation.tpl: a.nav-link + a separate
+            // button.dropdown-toggle-split for the caret) - both are plain
+            // .nav-link, which is display:block, so without this they stack
+            // instead of sitting side by side. The caret button gets its own
+            // thin separator line instead of just floating next to the label.
+            &.dropdown {
+                display: flex;
+                align-items: stretch;
+
+                > .dropdown-toggle-split {
+                    display: inline-flex;
+                    align-items: center;
+                    margin-left: .125rem;
+                    padding-left: .6rem;
+                    padding-right: .35rem;
+                    border-left: 1px solid var(--#{$prefix}border-color);
+
+                    &::after {
+                        margin-left: 0;
+                    }
+
+                    &:hover {
+                        border-left-color: var(--#{$prefix}secondary-color);
+                    }
+                }
+            }
+        }
+    }
+
+    // Opens #searchModal (navigation.tpl) - same flat "line, not fill"
+    // language as everywhere else in this theme, not a filled button.
+    .searchbox {
+        background: transparent;
+        border: 1px solid var(--#{$prefix}border-color);
+        color: var(--#{$prefix}secondary-color);
+
+        &:hover {
+            color: var(--#{$prefix}body-color);
+            border-color: var(--#{$prefix}secondary-color);
+        }
+
+        &:focus {
+            border-color: $primary; // patched for skins in _skin-compat.scss
+            box-shadow: none;
+        }
+    }
+}
+
+// Instant-search suggestions dropdown (search_suggestions.tpl), shared by
+// the nav searchbox modal and the standalone search page's inline field -
+// layout only, colors already come from the same dropdown-menu/dropdown-item
+// rules the rest of the theme uses (see _variables.scss: dropdowns default
+// to var(--bs-body-bg), separated only by var(--bs-border-color)).
+.search-suggestions {
+    width: 100%;
+    max-height: 60vh;
+    overflow-y: auto;
+
+    .dropdown-item {
+        white-space: normal;
+    }
+
+    .search-result-title {
+        overflow: hidden;
+        min-width: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // Inside #searchModal (navigation.tpl) the suggestions list is already
+    // framed by the modal itself - drop the dropdown's own floating-card
+    // chrome so it just grows as part of the modal body instead of looking
+    // like a second card nested inside it.
+    &.search-suggestions-modal {
+        position: static;
+        display: block;
+        width: auto;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+    }
+}

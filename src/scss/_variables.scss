@@ -1,0 +1,110 @@
+// flatDark - variables
+//
+// These are set *before* bootstrap/scss/bootstrap is imported in theme.scss,
+// so bootstrap's own `!default` variables pick them up. That's the only
+// order in which changing $primary etc. actually affects the compiled
+// Bootstrap components (buttons, alerts, badges, ...) - setting them
+// afterwards only affects hand-written SCSS in this folder, not Bootstrap's
+// own output.
+//
+// flatDark only ships the dark palette - there is no light/dark switch here
+// (a separate "flatLight" theme is planned for that). $body-bg/$body-color/
+// $border-color below ARE the theme, not just a fallback.
+
+// scss-docs-start theme-color-variables
+// Contextual/semantic colors. Under the "no different background colors"
+// rule (see _flat.scss) these only ever color text, icons and thin accent
+// borders - never a fill.
+$primary:   #cf4173; // brand color
+$secondary: #8a8fa0;
+$success:   #2fa876; // near-complementary teal-green
+$info:      #2fa8c9;
+$warning:   #d99a2b;
+$danger:    #e2483f; // kept clearly apart in hue from $primary
+$light:     #ced4da;
+$dark:      #6c757d;
+// scss-docs-end theme-color-variables
+
+$body-bg:      #16181d;
+$body-color:   #e7e9ec;
+$border-color: #2b2f38;
+
+// Bootstrap defaults this to $black (it's meant for a light page, "emphasis"
+// = darker than body text) - on a dark page that reads as barely-visible
+// black text. It feeds table text, list-group active text, .text-emphasis-*,
+// ... so it needs to flip the same way $body-color did.
+$body-emphasis-color: #fff;
+
+// Same problem, different variables: Bootstrap defaults these to $gray-100 /
+// $gray-200 (light grays, meant to sit on a white page as a barely-there
+// tint). They're what dropdown-item/pagination *hover* backgrounds and
+// input/select/pagination *disabled* backgrounds are built from - on this
+// dark page that turned hover/disabled states into a jarringly light patch
+// instead of a subtle one. Built as a small step up from $body-bg instead.
+$body-tertiary-bg: mix($body-color, $body-bg, 6%);
+$body-secondary-bg: mix($body-color, $body-bg, 12%);
+
+// This theme never sets data-bs-theme - Bootstrap's own dark-mode variant
+// (color-mode(dark)) would otherwise still get compiled in unused.
+$enable-dark-mode: false;
+
+$link-color:       $primary;
+$link-hover-color: mix($primary, white, 65%);
+
+// The expanded accordion chevron is a baked SVG data-uri (can't read a CSS
+// custom property), so it can't be patched for skins the way _skin-compat.scss
+// patches everything else - it stays a fixed, always-legible light color
+// instead of the auto-computed $primary-text-emphasis (a *darkened* shade of
+// $primary, meant to sit on that light bg-subtle Bootstrap normally gives it -
+// see the accordion fix in _flat.scss - and on this theme's dark, transparent
+// button that shade is nearly invisible).
+$accordion-icon-active-color: $body-color;
+
+// Flat design tokens: no shadows/gradients/rounded corners. $enable-rounded
+// disables Bootstrap's border-radius() mixin theme-wide (also covers the
+// .rounded utility class); the radius variables are zeroed too since a few
+// spots in this theme (buttons in _flat.scss, thumbnails, ...) reference
+// $border-radius directly instead of through that mixin.
+$enable-shadows:   false;
+$enable-gradient:  false;
+$enable-gradients: false;
+$enable-rounded:   false;
+$border-radius:      0;
+$border-radius-sm:   0;
+$border-radius-lg:   0;
+$box-shadow:    none;
+$box-shadow-sm: none;
+$box-shadow-lg: none;
+
+$font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+// Cards / dropdowns / modals / offcanvas / inputs / list-groups all default
+// to var(--bs-body-bg) in Bootstrap already - left untouched on purpose, so
+// they share the exact same background as the page and are only separated
+// by var(--bs-border-color). That *is* the "no different background colors,
+// text/border only" rule applied to Bootstrap's own surface components.
+
+// Breathing room below the navbar (_navbar.scss) - a page without a teaser
+// needs this as plain margin. A page *with* one (#pageTeaser in theme.scss)
+// cancels it out with a matching negative margin-top instead, so the
+// teaser's own background sits flush against the navbar rather than leaving
+// a gap of plain page background above it.
+$navbar-spacer: 2rem;
+
+// A second, deliberate exception: a touch of depth for a handful of spots
+// that should read as gently "sunken" or "raised" relative to the page
+// rather than perfectly flush with it (#pageTeaser sunken, .navbar-se
+// raised - see theme.scss / _navbar.scss) - color-mix() instead of a fixed
+// hex so both stay relative to var(--bs-body-bg) even if a future skin ever
+// changes that. Kept subtle on purpose - a little, not a new surface color.
+// Not the same percentage in both directions: mixing in white reads much
+// stronger against a near-black base than mixing in black by the same
+// amount (going lighter from near-black is perceptually a bigger jump), so
+// $surface-raised-bg uses less white than $surface-sunken-bg uses black to
+// end up looking like a comparably small step either way.
+// Note: hardcoded "--bs-" prefix, not #{$prefix} - this file loads before
+// bootstrap/scss/variables sets that variable's default.
+$surface-sunken-bg: color-mix(in srgb, black 10%, var(--bs-body-bg));
+$surface-raised-bg: color-mix(in srgb, white 4%, var(--bs-body-bg));
+
+$price-tag-color: $primary;

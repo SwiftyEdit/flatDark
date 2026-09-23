@@ -3,13 +3,19 @@
     "id": "flatDark",
     "type": "theme",
     "name": "flatDark",
-    "version": "1.0",
-    "build": 1,
+    "version": "1.1",
+    "build": 2,
     "author": "SwiftyEdit Developer Team",
     "description": "A dark, flat theme for SwiftyEdit with thin-line accents, no rounded corners and swappable color skins. Covers the full default-theme feature set. Early version - the layout may still change.",
     "update_url": "https://raw.githubusercontent.com/SwiftyEdit/flatDark/main/info.json"
   },
   "versions": [
+    {
+      "version": "1.1",
+      "build": 2,
+      "requires_build": "26-0183",
+      "download_url": "https://github.com/SwiftyEdit/flatDark/releases/download/v1.1/flatDark-1.1.zip"
+    },
     {
       "version": "1.0",
       "build": 1,

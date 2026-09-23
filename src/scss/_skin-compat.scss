@@ -161,6 +161,7 @@ $skin-primary-active: color-mix(in srgb, var(--#{$prefix}primary) 88%, black);
     border-color: $skin-primary;
 }
 
-.post-thumbnail:hover {
+.post-thumbnail:hover,
+.post-gallery-thumb:hover {
     border-color: $skin-primary;
 }

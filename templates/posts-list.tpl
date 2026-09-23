@@ -61,17 +61,25 @@
 
         {* post type gallery *}
         {if $value.post_type == "g"}
-
-            <span class="post-author">{$value.post_author}</span> <span class="post-releasedate">{$value.post_releasedate_str}</span>
-            <a class="post-headline-link" href="{$value.post_href}"><h3>{$value.post_title}</h3></a>
-            {$value.post_teaser}
-
-            <div class="post-thumbnails clearfix border-1">
-                {if $value.post_thumbnails == true}
-                    {foreach $value.post_thumbnails as $thumb}
-                        <a href="{$thumb.img_src}" class="post-thumbnail lightbox" style="background-image: url({$thumb.tmb_src})"></a>
-                    {/foreach}
-                {/if}
+            <div class="row">
+                <div class="col-md-5">
+                    <span class="post-author">{$value.post_author}</span> <span class="post-releasedate">{$value.post_releasedate_str}</span>
+                    <a class="post-headline-link" href="{$value.post_href}"><h3>{$value.post_title}</h3></a>
+                    {$value.post_teaser}
+                </div>
+                <div class="col-md-7">
+                    {* 3-column grid: up to 5 thumbnails, the "show n images" button fills the sixth cell *}
+                    <div class="post-gallery-grid">
+                        {if $value.post_thumbnails == true}
+                            {foreach $value.post_thumbnails as $thumb}
+                                <a href="{$thumb.img_src}" class="post-gallery-thumb lightbox" style="background-image: url({$thumb.tmb_src})"></a>
+                            {/foreach}
+                        {/if}
+                        {if $value.post_href != false}
+                            <a class="btn btn-outline-primary post-gallery-more {$read_more_class}" href="{$value.post_href}">{$value.btn_open_post}</a>
+                        {/if}
+                    </div>
+                </div>
             </div>
         {/if}
         {* post type gallery end *}
@@ -192,7 +200,8 @@
             </div>
         {/if}
             <div class="col text-end">
-                {if $value.post_href != false}
+                {* galleries show this button as the sixth grid cell instead *}
+                {if $value.post_href != false && $value.post_type != "g"}
                     <a class="btn btn-primary {$read_more_class}" href="{$value.post_href}">{$value.btn_open_post}</a>
                 {/if}
         </div>

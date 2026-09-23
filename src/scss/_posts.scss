@@ -50,6 +50,46 @@ a.post-headline-link {
     border-color: $primary;
 }
 
+/* gallery entry in the post list: 3x2 grid of square cells,
+   5 thumbnails + the "show n images" button as the sixth cell */
+.post-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .5rem;
+
+    @include media-breakpoint-down(md) {
+        margin-top: 1rem;
+    }
+}
+
+.post-gallery-thumb,
+.post-gallery-more {
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+}
+
+.post-gallery-thumb {
+    display: block;
+    background-color: rgba(255, 255, 255, 0.04);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid var(--#{$prefix}border-color);
+
+    &:hover {
+        border-color: $primary;
+    }
+}
+
+.post-gallery-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    padding: .5rem;
+}
+
 .post-author,
 .post-releasedate {
     font-size: smaller;
